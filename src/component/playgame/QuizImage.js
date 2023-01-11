@@ -1,8 +1,9 @@
 
-const QuizImage = () => {
+const QuizImage = (img, time) => {
     return (
         <div className="w-76 h-full bg-glay-100 ">
-            QuizImage
+            <p>{time}</p>
+            <img src={img}></img>
         </div>
     )
 }

@@ -1,39 +1,58 @@
-import AnswerList from "../component/playgame/AnswerList";
-import QuizImage from "../component/playgame/QuizImage";
-import Score from "../component/playgame/Score";
-
 import React, { useState, useEffect } from 'react';
 
 import Champions from '../resource/champion.json'
 
 const PlayGameScene = () => {
-    const [championList, setChampionList] = useState(); //chamName id num skinName
+    const [championList, setChampionList] = useState([]); //chamName id num skinName
+    const [inputField, setInputField] = useState();
+    const [score, setScore] = useState(0);
+    const [stage, setStage] = useState(0);
+    const [timer, setTimer] = useState();
+
     const playNumber = 10;
-    const testCham = [{ "enName": "Gangplank", "koName": "갱플랭크", "skinNum": 23, "skinName": "배신자 갱플랭크" }, { "enName": "RekSai", "koName": "렉사이", "skinNum": 0, "skinName": "default" }, { "enName": "Shen", "koName": "쉔", "skinNum": 4, "skinName": "핏빛달 쉔" }, { "enName": "Braum", "koName": "브라움", "skinNum": 2, "skinName": "프로레슬러 브라움" }, { "enName": "Thresh", "koName": "쓰레쉬", "skinNum": 1, "skinName": "심연의 공포 쓰레쉬" }, { "enName": "Gnar", "koName": "나르", "skinNum": 15, "skinName": "우주비행사 나르" }, { "enName": "Taliyah", "koName": "탈리야", "skinNum": 0, "skinName": "default" }, { "enName": "Aphelios", "koName": "아펠리오스", "skinNum": 18, "skinName": "EDG 아펠리오스" }, { "enName": "Rakan", "koName": "라칸", "skinNum": 18, "skinName": "아르카나 라칸" }, { "enName": "Samira", "koName": "사미라", "skinNum": 20, "skinName": "하이 눈 사미라" }]
+    const playTime = 10000;
+
     useEffect(() => {
-        const GameStart = () => {
+        const GameInit = () => {
             const championNumber = 162;
             var cl = [];
             for (var i = 0; i < playNumber; i++) {
                 const chamRan = Math.floor(Math.random() * championNumber);
                 const skinRam = Math.floor(Math.random() * Champions[Object.keys(Champions)[chamRan]].skins.length);
                 const enName = Object.keys(Champions)[chamRan];
-                const koName = Champions[Object.keys(Champions)[chamRan]].name;
+                const korName = Champions[Object.keys(Champions)[chamRan]].name;
                 const skinNum = Champions[Object.keys(Champions)[chamRan]].skins[skinRam].num;
                 const skinName = Champions[Object.keys(Champions)[chamRan]].skins[skinRam].name;
 
-                const clitem = { enName, koName, skinNum, skinName }
+                const clitem = { enName, korName, skinNum, skinName }
                 cl = [clitem, ...cl];
             }
 
-
             setChampionList(cl);
-            // console.log(JSON.stringify(cl));
-            console.log(cl);
-            // return cl;
         };
-        GameStart();
+        GameInit();
+        StageStart();
     }, [])
+
+    const StageStart = () => {
+        const standardTime = new Date();
+        const getTimer = setInterval(() => {
+            const currentTime = new Date();
+            setTimer(playTime - (currentTime.getTime() - standardTime.getTime()));
+            if (playTime - (currentTime.getTime() - standardTime.getTime()) < 0) {
+                clearInterval(getTimer);
+            }
+        }, 100)
+    }
+    const InputAnswer = () => {
+        if (championList[stage].korName === inputField) {
+            console.log('정답');
+            setScore(timer);
+            StageStart();
+        } else {
+            console.log("오답")
+        }
+    }
 
     return (
         <div className="h-screen w-screen flex justify-center justify-items-center items-center">
@@ -42,15 +61,15 @@ const PlayGameScene = () => {
             <div className="border-solid border-2 border-sky-500 w-96 h-96 flex justify-center justify-items-center items-center">
                 <div>
                     <div></div>
-                    <QuizImage></QuizImage>
                 </div>
 
                 <div className="flex flex-col">
-                    <Score></Score>
-                    <AnswerList answerList></AnswerList>
-                    {testCham.map(i =>
-                        <div>{i.enName}</div>
-                    )}
+                    <p>stage : {stage}</p>
+                    {championList[stage].korName}
+                    <img src={`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${championList[stage].enName}_${championList[stage].skinNum}.jpg`} alt="챔피언" />
+                    {timer}
+                    <input type="text" onChange={(e) => { setInputField(e.target.value) }} />
+                    <button onClick={() => InputAnswer()}>버튼</button>
                 </div>
             </div>
         </div>
