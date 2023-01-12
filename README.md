@@ -26,3 +26,14 @@ Answerlist
 input 
 quiz
 score
+
+
+todo
+리스트뽑기 / 해결
+이미지 가져오기 / 해결
+타이머 구현 / 해결
+
+점수
+이미지 확대
+Stage 넘기기
+정답 
