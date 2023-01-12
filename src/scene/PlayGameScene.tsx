@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Champions from '../resource/champion.json';
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 interface ChampionProps {
     korName: String;
@@ -76,7 +77,15 @@ const PlayGameScene: React.FC = () => {
 
                 <div className="flex flex-col">
                     {championList[stage].korName}
-                    <img src={`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${championList[stage].enName}_${championList[stage].skinNum}.jpg?api_key=${apikey}}`} alt="챔피언" />
+                    <TransformWrapper
+                        initialScale={1}
+                        disabled={true}
+                    >
+                        <TransformComponent>
+                            <img src={`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${championList[stage].enName}_${championList[stage].skinNum}.jpg?api_key=${apikey}}`} alt="챔피언" />
+                        </TransformComponent>
+                    </TransformWrapper>
+
                     <p>{timer}</p>
                     <p>{score}</p>
                     <p>{stage}</p>
