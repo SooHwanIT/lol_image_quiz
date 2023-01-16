@@ -17,7 +17,7 @@ const PlayGameScene: React.FC = () => {
     const [timer, setTimer] = useState<number>(0);
     const [timerId, setTimerId] = useState<number>(0);
     const playNumber = 10;
-    const playTime = 10000;
+    const playTime = 30000;
 
     const apikey = "RGAPI-6a000527-0b03-4218-9847-bb11eb5d1fed";
 
@@ -48,6 +48,7 @@ const PlayGameScene: React.FC = () => {
         const getTimer = setInterval(() => {
             const currentTime = new Date();
             setTimer(playTime - (currentTime.getTime() - standardTime.getTime()));
+
             if (playTime - (currentTime.getTime() - standardTime.getTime()) < 0) {
                 clearInterval(getTimer);
             }
@@ -56,6 +57,7 @@ const PlayGameScene: React.FC = () => {
     }
     const InputAnswer = () => {
         console.log(championList)
+        console.log(timer / 1000)
         if (championList[stage].korName === inputField) {
             console.log('정답');
             clearInterval(timerId);
@@ -78,8 +80,8 @@ const PlayGameScene: React.FC = () => {
                 <div className="flex flex-col">
                     {championList[stage].korName}
                     <TransformWrapper
-                        initialScale={1}
-                        disabled={true}
+                        initialScale={7.295}
+                    // disabled={true}
                     >
                         <TransformComponent>
                             <img src={`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${championList[stage].enName}_${championList[stage].skinNum}.jpg?api_key=${apikey}}`} alt="챔피언" />
